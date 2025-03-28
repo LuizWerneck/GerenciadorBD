@@ -23,52 +23,73 @@ namespace gerenciadorBanco
             {"CD_GRUPO", "update produtos set cd_grupo = (select first 1 (cd_grupo) from grupos) where cd_grupo not in(select cd_grupo from grupos) or (cd_grupo is NULL)" },
             {"CD_LABORATORIO","update produtos set cd_laboratorio = (select first 1 (cd_laboratorio) from laboratorios) where cd_laboratorio not in(select cd_laboratorio from laboratorios) or (cd_laboratorio is NULL)" },
             {"ID_PRODUTO", "UPDATE PRODUTOS SET ID_PRODUTO = (SELECT FIRST 1 ID_PRODUTO + 1 FROM PRODUTOS p WHERE NOT EXISTS (SELECT 1 FROM PRODUTOS p2 WHERE p2.ID_PRODUTO = p.ID_PRODUTO + 1) ORDER BY ID_PRODUTO) WHERE ID_PRODUTO = 0" },
-            {"CD_PRODUTO", @"UPDATE produtos SET CD_PRODUTO = LPAD(CAST(CAST(ID_PRODUTO AS INTEGER) AS VARCHAR (6)),6,0 ) WHERE CD_PRODUTO = '000000' or (cd_produto = '0')" }
+            {"CD_PRODUTO", @"UPDATE produtos SET CD_PRODUTO = LPAD(CAST(CAST(ID_PRODUTO AS INTEGER) AS VARCHAR (6)),6,0 ) WHERE CD_PRODUTO = '000000' or (cd_produto = '0') or id_produto <> CAST(cd_produto AS DOUBLE PRECISION)" }
+            //{"ID","UPDATE PRODUTOS SET CD_PRODUTO = LPAD(CAST(CAST(ID_PRODUTO AS INTEGER) AS VARCHAR (6)),'6',0 ) WHERE id_produto <> CAST(cd_produto AS DOUBLE PRECISION)"}
         };
 
         string queryListar = @"SELECT 
-                            CASE
-                                WHEN (p.id_produto is null OR p.id_produto = 0) THEN 'ID Produto faltando'
-                                WHEN (p.cd_produto = '0' OR p.cd_produto = '') THEN 'Código Produto faltando'
-                                WHEN (p.cd_classe IS NOT NULL AND c.cd_classe IS NULL) THEN 'Classe Divergente'
-                                WHEN (p.cd_classe IS NULL) THEN 'Classe faltando'
-                                WHEN (p.cd_grupo IS NOT NULL AND g.cd_grupo IS NULL) THEN 'Grupo Divergente'
-                                WHEN (p.cd_grupo IS NULL) THEN 'Grupo faltando'
-                                WHEN (p.cd_laboratorio IS NOT NULL AND l.cd_laboratorio IS NULL) THEN 'Laboratório Divergente'
-                                WHEN (p.cd_laboratorio IS NULL) THEN 'Laboratório faltando'
-                                WHEN (p.cd_grupocompra IS NOT NULL AND gc.cd_grupocompra IS NULL) THEN 'Grupo Compra Divergente'
-                                WHEN (p.cd_grupobalanco IS NOT NULL AND gb.cd_grupobalanco IS NULL) THEN 'Grupo Balanço Divergente'
-                                WHEN (p.id_familia IS NOT NULL AND f.id_familia IS NULL) THEN 'Família Divergente'
-                                ELSE 'Nenhuma inconsistência'
-                            END AS campo_inconsistente,
-                            p.id_produto,
-                            p.cd_produto,
-                            p.descricao,
-                            p.cd_classe,
-                            p.cd_grupo,
-                            p.cd_laboratorio,
-                            p.cd_grupocompra,
-                            p.cd_grupobalanco,
-                            p.id_familia
-                        FROM PRODUTOS p
-                        LEFT JOIN CLASSES c ON p.cd_classe = c.cd_classe
-                        LEFT JOIN GRUPOS g ON p.cd_grupo = g.cd_grupo
-                        LEFT JOIN LABORATORIOS l ON p.cd_laboratorio = l.cd_laboratorio
-                        LEFT JOIN GRUPOSCOMPRAS gc ON p.cd_grupocompra = gc.cd_grupocompra
-                        LEFT JOIN GRUPOSBALANCO gb ON p.cd_grupobalanco = gb.cd_grupobalanco
-                        LEFT JOIN FAMILIAS f ON p.id_familia = f.id_familia
-                        WHERE 
-                            (p.id_produto is null OR p.id_produto = 0) OR
-                            (p.cd_produto = '0' OR p.cd_produto = '') OR
-                            (p.cd_classe IS NOT NULL AND c.cd_classe IS NULL) OR
-                            (p.cd_classe IS NULL) or
-                            (p.cd_grupo IS NOT NULL AND g.cd_grupo IS NULL) OR
-                            (p.cd_grupo IS NULL) OR
-                            (p.cd_laboratorio IS NOT NULL AND l.cd_laboratorio IS NULL) OR
-                            (p.cd_laboratorio IS NULL) OR
-                            (p.cd_grupocompra IS NOT NULL AND gc.cd_grupocompra IS NULL) OR
-                            (p.cd_grupobalanco IS NOT NULL AND gb.cd_grupobalanco IS NULL) OR
-                            (p.id_familia IS NOT NULL AND f.id_familia IS NULL)";
+                                    CASE
+                                        WHEN (p.id_produto IS NULL OR p.id_produto = 0) THEN 'ID Produto faltando'
+                                        WHEN (p.id_produto <> CAST(cd_produto AS DOUBLE PRECISION)) THEN 'ID difere do CD' 
+                                        WHEN (p.cd_produto = '0' OR p.cd_produto = '') THEN 'Código Produto faltando'
+
+                                         WHEN (EXISTS (
+                                            SELECT 1 
+                                            FROM PRODUTOS p2 
+                                            WHERE p2.id_produto = p.id_produto 
+                                              AND p2.id_produto IS NOT NULL
+                                            GROUP BY p2.id_produto 
+                                            HAVING COUNT(*) > 1
+                                        )) THEN 'ID Produto duplicado'
+                                        WHEN (p.cd_classe IS NOT NULL AND c.cd_classe IS NULL) THEN 'Classe Divergente'
+                                        WHEN (p.cd_classe IS NULL) THEN 'Classe faltando'
+                                        WHEN (p.cd_grupo IS NOT NULL AND g.cd_grupo IS NULL) THEN 'Grupo Divergente'
+                                        WHEN (p.cd_grupo IS NULL) THEN 'Grupo faltando'
+                                        WHEN (p.cd_laboratorio IS NOT NULL AND l.cd_laboratorio IS NULL) THEN 'Laboratório Divergente'
+                                        WHEN (p.cd_laboratorio IS NULL) THEN 'Laboratório faltando'
+                                        WHEN (p.cd_grupocompra IS NOT NULL AND gc.cd_grupocompra IS NULL) THEN 'Grupo Compra Divergente'
+                                        WHEN (p.cd_grupobalanco IS NOT NULL AND gb.cd_grupobalanco IS NULL) THEN 'Grupo Balanço Divergente'
+                                        WHEN (p.id_familia IS NOT NULL AND f.id_familia IS NULL) THEN 'Família Divergente'
+
+                                        ELSE 'Nenhuma inconsistência'
+                                    END AS campo_inconsistente,
+                                    p.id_produto,
+                                    p.cd_produto,
+                                    p.descricao,
+                                    p.cd_classe,
+                                    p.cd_grupo,
+                                    p.cd_laboratorio,
+                                    p.cd_grupocompra,
+                                    p.cd_grupobalanco,
+                                    p.id_familia
+                                FROM PRODUTOS p
+                                LEFT JOIN CLASSES c ON p.cd_classe = c.cd_classe
+                                LEFT JOIN GRUPOS g ON p.cd_grupo = g.cd_grupo
+                                LEFT JOIN LABORATORIOS l ON p.cd_laboratorio = l.cd_laboratorio
+                                LEFT JOIN GRUPOSCOMPRAS gc ON p.cd_grupocompra = gc.cd_grupocompra
+                                LEFT JOIN GRUPOSBALANCO gb ON p.cd_grupobalanco = gb.cd_grupobalanco
+                                LEFT JOIN FAMILIAS f ON p.id_familia = f.id_familia
+                                WHERE 
+                                    (p.id_produto IS NULL OR p.id_produto = 0) OR
+                                    (p.id_produto <> CAST(cd_produto AS DOUBLE PRECISION)) OR
+                                    (p.cd_produto = '0' OR p.cd_produto = '') OR
+                                    (EXISTS (
+                                        SELECT 1 
+                                        FROM PRODUTOS p2 
+                                        WHERE p2.id_produto = p.id_produto 
+                                          AND p2.id_produto IS NOT NULL
+                                        GROUP BY p2.id_produto 
+                                        HAVING COUNT(*) > 1
+                                    )) or
+                                    (p.cd_classe IS NOT NULL AND c.cd_classe IS NULL) OR
+                                    (p.cd_classe IS NULL) OR
+                                    (p.cd_grupo IS NOT NULL AND g.cd_grupo IS NULL) OR
+                                    (p.cd_grupo IS NULL) OR
+                                    (p.cd_laboratorio IS NOT NULL AND l.cd_laboratorio IS NULL) OR
+                                    (p.cd_laboratorio IS NULL) OR
+                                    (p.cd_grupocompra IS NOT NULL AND gc.cd_grupocompra IS NULL) OR
+                                    (p.cd_grupobalanco IS NOT NULL AND gb.cd_grupobalanco IS NULL) OR
+                                    (p.id_familia IS NOT NULL AND f.id_familia IS NULL)";
 
         public FormInconsistencia()
         {
@@ -107,17 +128,32 @@ namespace gerenciadorBanco
 
         private void button1_Click(object sender, EventArgs e)
         {
-
-            
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            // Cria uma nova instância do OpenFileDialog
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                var caminho = openFileDialog1.FileName;
-                lblCaminho.Text = caminho;
-                ConnectToDatabase(caminho);
+                // Configurações do OpenFileDialog
+                openFileDialog.Filter = "Arquivos de Banco de Dados Firebird (*.fdb)|*.fdb";
+                openFileDialog.Title = "Selecione um arquivo .fdb";
                 
-            }
+                openFileDialog.CheckFileExists = true; 
+                openFileDialog.CheckPathExists = true; 
 
+                // Exibe o OpenFileDialog
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Obtém o caminho do arquivo selecionado
+                    var caminho = openFileDialog.FileName;
+
+                    // Define o caminho no label
+                    lblCaminho.Text = caminho;
+
+                    // Conecta ao banco de dados usando o caminho selecionado
+                    ConnectToDatabase(caminho);
+                }
+            }
         }
+
+
 
         public void btnCorrige_Click(object sender, EventArgs e)
         {
