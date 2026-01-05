@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.sidebar = new System.Windows.Forms.FlowLayoutPanel();
             this.menuButton = new System.Windows.Forms.Button();
@@ -39,7 +38,7 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnFechar = new System.Windows.Forms.Button();
             this.btnMinimiza = new System.Windows.Forms.Button();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.btnNfce = new System.Windows.Forms.Button();
             this.sidebar.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -51,7 +50,8 @@
             this.sidebar.Controls.Add(this.btnLimpar);
             this.sidebar.Controls.Add(this.btnIncosistencia);
             this.sidebar.Controls.Add(this.lblDataHora);
-            this.sidebar.Dock = System.Windows.Forms.DockStyle.Left;
+            this.sidebar.Controls.Add(this.btnNfce);
+            this.sidebar.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.sidebar.Location = new System.Drawing.Point(0, 0);
             this.sidebar.MaximumSize = new System.Drawing.Size(171, 563);
             this.sidebar.MinimumSize = new System.Drawing.Size(65, 563);
@@ -88,7 +88,7 @@
             this.btnLimpar.Location = new System.Drawing.Point(3, 127);
             this.btnLimpar.Margin = new System.Windows.Forms.Padding(3, 3, 3, 30);
             this.btnLimpar.Name = "btnLimpar";
-            this.btnLimpar.Size = new System.Drawing.Size(165, 62);
+            this.btnLimpar.Size = new System.Drawing.Size(165, 50);
             this.btnLimpar.TabIndex = 2;
             this.btnLimpar.Text = "Limpeza de Banco";
             this.btnLimpar.UseVisualStyleBackColor = true;
@@ -101,10 +101,10 @@
             this.btnIncosistencia.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnIncosistencia.ForeColor = System.Drawing.Color.White;
             this.btnIncosistencia.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnIncosistencia.Location = new System.Drawing.Point(3, 222);
+            this.btnIncosistencia.Location = new System.Drawing.Point(3, 210);
             this.btnIncosistencia.Margin = new System.Windows.Forms.Padding(3, 3, 3, 30);
             this.btnIncosistencia.Name = "btnIncosistencia";
-            this.btnIncosistencia.Size = new System.Drawing.Size(165, 62);
+            this.btnIncosistencia.Size = new System.Drawing.Size(165, 49);
             this.btnIncosistencia.TabIndex = 3;
             this.btnIncosistencia.Text = "Verificar Inconsistências";
             this.btnIncosistencia.UseVisualStyleBackColor = true;
@@ -116,7 +116,7 @@
             this.lblDataHora.AutoSize = true;
             this.lblDataHora.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDataHora.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lblDataHora.Location = new System.Drawing.Point(3, 314);
+            this.lblDataHora.Location = new System.Drawing.Point(168, 289);
             this.lblDataHora.Name = "lblDataHora";
             this.lblDataHora.Padding = new System.Windows.Forms.Padding(0, 230, 0, 0);
             this.lblDataHora.Size = new System.Drawing.Size(0, 245);
@@ -142,9 +142,9 @@
             this.flowLayoutPanel1.Controls.Add(this.btnMinimiza);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(171, 0);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(722, 32);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(893, 32);
             this.flowLayoutPanel1.TabIndex = 0;
             this.flowLayoutPanel1.WrapContents = false;
             this.flowLayoutPanel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.form_MouseDown);
@@ -156,7 +156,7 @@
             this.btnFechar.FlatAppearance.BorderSize = 0;
             this.btnFechar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnFechar.Image = ((System.Drawing.Image)(resources.GetObject("btnFechar.Image")));
-            this.btnFechar.Location = new System.Drawing.Point(692, 5);
+            this.btnFechar.Location = new System.Drawing.Point(863, 5);
             this.btnFechar.Margin = new System.Windows.Forms.Padding(5, 5, 10, 5);
             this.btnFechar.Name = "btnFechar";
             this.btnFechar.Size = new System.Drawing.Size(20, 20);
@@ -169,7 +169,7 @@
             this.btnMinimiza.FlatAppearance.BorderSize = 0;
             this.btnMinimiza.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMinimiza.Image = ((System.Drawing.Image)(resources.GetObject("btnMinimiza.Image")));
-            this.btnMinimiza.Location = new System.Drawing.Point(657, 5);
+            this.btnMinimiza.Location = new System.Drawing.Point(828, 5);
             this.btnMinimiza.Margin = new System.Windows.Forms.Padding(5, 5, 10, 5);
             this.btnMinimiza.Name = "btnMinimiza";
             this.btnMinimiza.Size = new System.Drawing.Size(20, 20);
@@ -177,9 +177,21 @@
             this.btnMinimiza.UseVisualStyleBackColor = true;
             this.btnMinimiza.Click += new System.EventHandler(this.btnMinimiza_Click);
             // 
-            // timer1
+            // btnNfce
             // 
-            this.timer1.Interval = 1000;
+            this.btnNfce.FlatAppearance.BorderSize = 0;
+            this.btnNfce.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNfce.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNfce.ForeColor = System.Drawing.Color.White;
+            this.btnNfce.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnNfce.Location = new System.Drawing.Point(12, 292);
+            this.btnNfce.Margin = new System.Windows.Forms.Padding(3, 3, 3, 30);
+            this.btnNfce.Name = "btnNfce";
+            this.btnNfce.Size = new System.Drawing.Size(150, 55);
+            this.btnNfce.TabIndex = 5;
+            this.btnNfce.Text = "Alteração de Dados";
+            this.btnNfce.UseVisualStyleBackColor = true;
+            this.btnNfce.Click += new System.EventHandler(this.btnNfce_Click);
             // 
             // Form1
             // 
@@ -213,8 +225,8 @@
         private System.Windows.Forms.Button btnMinimiza;
         private System.Windows.Forms.Button btnIncosistencia;
         private System.Windows.Forms.Label lblDataHora;
-        private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.FlowLayoutPanel sidebar;
+        private System.Windows.Forms.Button btnNfce;
     }
 }
 

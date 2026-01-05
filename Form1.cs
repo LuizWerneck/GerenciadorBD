@@ -19,17 +19,18 @@ namespace gerenciadorBanco
         public Form1()
         {
             InitializeComponent();
-            timer1.Interval = 1000;
-            timer1.Tick += new EventHandler(timer1_Tick);
-            timer1.Start(); // Inicia o Timer
-
 
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        public void HabilitarMenuLateral(bool habilitar)
         {
-            lblDataHora.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+            /*menuButton.Enabled = habilitar;
+            btnLimpar.Enabled = habilitar;
+            btnIncosistencia.Enabled = habilitar;
+            btnNfce.Enabled = habilitar;*/
+            sidebar.Enabled = habilitar;
         }
+
 
         private void menuButton_Click(object sender, EventArgs e)
         {
@@ -91,6 +92,18 @@ namespace gerenciadorBanco
 
             pnlPrincipal.Controls.Add(frmInco);
             frmInco.Show();
+
+        }
+
+        private void btnNfce_Click(object sender, EventArgs e)
+        {
+            pnlPrincipal.Controls.Clear();
+            FormAlteracaoDados frmAltera = new FormAlteracaoDados();
+            frmAltera.TopLevel = false;
+            frmAltera.Dock = DockStyle.Fill;
+
+            pnlPrincipal.Controls.Add(frmAltera);
+            frmAltera.Show();
 
         }
     }

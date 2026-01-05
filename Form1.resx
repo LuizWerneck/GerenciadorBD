@@ -121,7 +121,7 @@
   <data name="pnlPrincipal.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAtIAAAIUCAYAAAA328sDAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wAAADsABataJCQAANyJJREFUeF7t3fe/LEW9P+r7V0nc7MQOsAXJCCpRSYoKouQkEgUJgiAiBlARRCRH
+        vwAADr8BOAVTJAAANyJJREFUeF7t3fe/LEW9P+r7V0nc7MQOsAXJCCpRSYoKouQkEgUJgiAiBlARRCRH
         kWjGiDnndI5H/Z7k99xz5+7PzKpFrV41MzW18lrPD88L9urqmpmenu53V1dV/z+vetWregAAwGQEaQAA
         aCBIAwBAA0EaAAAaCNIAANBAkAYAgAaCNAAANBCkAQCggSANAAANBGkAAGggSAMAQANBGgAAGgjSAADQ
         QJAGAIAGgjQAADQQpAEAoIEgDQAADQRpAABoIEgDAEADQRoAABoI0gAA0ECQBgCABoI0sCrtuccufeum
@@ -377,9 +377,6 @@
         7uKceyEAAACAw1pbmae+Uxym/SkAAAAASUVORK5CYII=
 </value>
   </data>
-  <metadata name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>39</value>
   </metadata>
